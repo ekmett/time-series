@@ -30,7 +30,8 @@ library
   build-depends:
     base >= 3 && < 5,
     lens >= 3.9 && < 4,
-    time >= 1.4 && < 1.5
+    time >= 1.4 && < 1.5,
+    vector >= 0.10 && < 0.11
 
   hs-source-dirs: src
   ghc-options:    -Wall
@@ -38,3 +39,5 @@ library
   exposed-modules:
     Data.Time.Series
     Data.Time.Series.Literal
+    Data.Time.Series.Model
+    Data.Time.Series.Periodicity
