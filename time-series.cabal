@@ -29,7 +29,7 @@ library
 
   build-depends:
     array,
-    base >= 3 && < 5,
+    base >= 4.6 && < 5,
     ghc-prim,
     lens >= 3.9 && < 4,
     tagged,
