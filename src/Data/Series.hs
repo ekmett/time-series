@@ -12,7 +12,6 @@ module Data.Series where
 import Control.Applicative
 import Control.Lens
 import Data.Foldable
-import Data.Ratio
 import Data.Time
 import Data.Traversable
 import Data.Typeable
