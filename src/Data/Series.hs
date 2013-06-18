@@ -47,7 +47,7 @@ class Sorted t => Timed t where
   type Delta :: (* -> *) -> *
 
 class Literate t where
-  _Literal :: Prism' (t a) (Literal a)
+  _Literal :: Lit a => Prism' (t a) (Literal a)
 
 instance Literate Literal where
   _Literal = id
@@ -72,7 +72,7 @@ day a = _Literal # Day a
 
 -- _Int :: Literate t => Prism (t Int) Int
 
-class Lit a where
+class Typeable a => Lit a where
   lit :: Literate t => a -> t a
 
 instance Lit Int where
@@ -112,7 +112,6 @@ data F :: (* -> *) -> * -> * where
   BackFill :: Timed t               => Delta t -> F t a -> F t a
 
   -- * Normal
-  Literal  ::                          Literal a -> F t a
   Every    ::                          F t b -> F t a -> F t a
   Monthly  :: Timed t               => F t Day
   Daily    :: Timed t               => F t Day
@@ -134,7 +133,7 @@ data F :: (* -> *) -> * -> * where
   ArgMin   ::                          F t a -> F t b -> F t b
   ArgMax   ::                          F t a -> F t b -> F t b
 
-instance (Lit a, Num a) => Num (F t a) where
+instance (Literate t, Lit a, Num a) => Num (F t a) where
   (+) = (:+)
   (-) = (:-)
   negate = Negate
@@ -143,20 +142,23 @@ instance (Lit a, Num a) => Num (F t a) where
   signum = Signum
   fromInteger = lit . fromInteger
 
-instance (Lit a, Fractional a) => Fractional (F t a) where
+instance (Literate t, Lit a, Fractional a) => Fractional (F t a) where
   (/) = (:/)
   recip = Recip
   fromRational = lit . fromRational
 
-instance Literate (F t) where
-  _Literal = prism' Literal $ \a -> case a of
-    Literal l -> Just l
-    _         -> Nothing
+_Var :: Lit a => Prism' (F t a) (t a)
+_Var = prism' Var $ \a -> case a of
+  Var l -> Just l
+  _ -> Nothing
 
-replaceMissing :: Lit a => a -> F t a -> F t a
+instance Literate t => Literate (F t) where
+  _Literal = _Var._Literal
+
+replaceMissing :: (Literate t, Lit a) => a -> F t a -> F t a
 replaceMissing a p = p `OrElse` lit a
 
-mad :: (Fractional a, Num a, Lit a, Ord a) => F t a -> F t a
+mad :: (Literate t, Fractional a, Lit a, Ord a) => F t a -> F t a
 mad a = median $ abs (a - median a)
 
 minimal, maximal :: F t a -> F t a
