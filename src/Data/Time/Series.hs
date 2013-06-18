@@ -13,11 +13,12 @@ module Data.Time.Series where
 -- import Control.Lens
 -- import Data.Time
 import Data.Time.Series.Literal
+import Data.Time.Series.Model
 import Data.Time.Series.Periodicity
 
-data F :: (Timing -> * -> *) -> Timing -> * -> * where
-  Var :: Lit a => m t a -> F m t a
-
+data F :: Timing -> * -> * where
+  Var :: Lit a      => Model t a -> F t a
+  EMA :: Periodic t => Double -> F t Double -> F t Double
 
 -- foo = Var (Periodic startingDate 1 (Vector.replicate 100 4)) :: F Model (P Monthly) a
 

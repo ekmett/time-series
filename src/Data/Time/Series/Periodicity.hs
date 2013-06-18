@@ -9,6 +9,7 @@ module Data.Time.Series.Periodicity
   ( Periodicity(..)
   , reifyPeriodicity
   , Timing(..)
+  , Periodic(..)
   ) where
 
 import Data.Data
@@ -21,6 +22,12 @@ data Periodicity = Daily | Weekly | Monthly | Yearly
 
 data Timing = V | P Periodicity
   deriving (Eq,Ord,Show,Read,Data,Typeable)
+
+class (t ~ P (Period t)) => Periodic (t :: Timing) where
+  type Period t :: Periodicity
+
+instance Periodic (P t) where
+  type Period (P t) = t
 
 newtype instance Sing (m :: Periodicity) = SPeriodicity Periodicity
 
