@@ -217,8 +217,3 @@ instance Timed Behavior where
 
   -- type Delta Behavior = NominalDiffTime
 
-eval :: F Behavior a -> Either (Literal a) (Behavior a)
-eval (Var as) = Right as
-eval (Step as) = case eval as of
-  Right behavior -> Right $ Behavior [ (f, t, i) | (f,t,_) <- runBehavior behavior | i <- [0..] ]
-  Left _         -> Left (Int 0)
