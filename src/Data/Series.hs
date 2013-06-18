@@ -96,7 +96,7 @@ instance Lit Day where
 data Dir = Asc | Desc
 
 data F :: (* -> *) -> * -> * where
-  Var      :: Typeable a            => t a -> F t a
+  Var      :: Lit a                 => t a -> F t a
 
   -- * Memory
   Sliding  :: Timed t               => Delta t -> (forall s. Sorted s => F s as -> F s b) -> F t as -> F t b
