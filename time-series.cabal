@@ -27,7 +27,10 @@ library
   default-language: Haskell98
   other-extensions: CPP
 
-  build-depends: base >= 3 && < 5
+  build-depends:
+    base >= 3 && < 5,
+    lens >= 3.9 && < 4,
+    time >= 1.4 && < 1.5
 
   hs-source-dirs: src
   ghc-options:    -Wall
