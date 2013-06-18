@@ -41,16 +41,6 @@ lift2 f (Integer a) (Integer b) = Integer (f a b)
 lift2 f (Rational a) (Rational b) = Rational (f a b)
 lift2 f (Day a) (Day b) = Day (f a b)
 
-
-instance (Typeable a, Num a) => Num (Literal a) where
-  (+) = lift2 (+)
-  (-) = lift2 (-)
-  negate = lift1 negate
-  abs = lift1 abs
-  signum = lift1 signum
-  (*) = lift2 (*)
-  fromInteger = undefined -- TODO, use infer
-
 class Literate t => Sorted t
 
 class Sorted t => Timed t where
