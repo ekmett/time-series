@@ -6,13 +6,22 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE ParallelListComp #-}
 module Data.Time.Series where
 
-import Control.Lens
-import Data.Time
+-- import Control.Lens
+-- import Data.Time
 import Data.Time.Series.Literal
+import Data.Time.Series.Periodicity
 
+data F :: (Timing -> * -> *) -> Timing -> * -> * where
+  Var :: Lit a => m t a -> F m t a
+
+
+-- foo = Var (Periodic startingDate 1 (Vector.replicate 100 4)) :: F Model (P Monthly) a
+
+{-
 class Literate t => Sorted t
 
 class Sorted t => Timed t where
@@ -109,3 +118,4 @@ last = Last
 
 first :: Sorted t => F t a -> F t a
 first = First
+-}
