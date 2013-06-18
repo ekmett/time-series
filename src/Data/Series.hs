@@ -16,12 +16,6 @@ import Data.Ratio
 import Data.Time
 import Data.Traversable
 
-newtype Source = Source String
-makePrisms ''Source
-
-newtype Column = Column String
-makePrisms ''Column
-
 data Type a where
   INT      :: Type Int
   DOUBLE   :: Type Double
