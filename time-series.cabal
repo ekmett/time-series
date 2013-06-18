@@ -35,4 +35,6 @@ library
   hs-source-dirs: src
   ghc-options:    -Wall
 
-  exposed-modules: Data.Series
+  exposed-modules:
+    Data.Series
+    Data.Series.Literal

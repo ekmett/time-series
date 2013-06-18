@@ -12,86 +12,15 @@ module Data.Series where
 import Control.Applicative
 import Control.Lens
 import Data.Foldable
+import Data.Series.Literal
 import Data.Time
 import Data.Traversable
 import Data.Typeable
-
-data Literal a where
-  Int      :: Int -> Literal Int
-  Double   :: Double -> Literal Double
-  String   :: String -> Literal String
-  Integer  :: Integer -> Literal Integer
-  Rational :: Rational -> Literal Rational
-  Day      :: Day -> Literal Day
-
-lift1 :: (a -> a) -> Literal a -> Literal a
-lift1 f (Int a) = Int (f a)
-lift1 f (Double a) = Double (f a)
-lift1 f (String a) = String (f a)
-lift1 f (Integer a) = Integer (f a)
-lift1 f (Rational a) = Rational (f a)
-lift1 f (Day a) = Day (f a)
-
-lift2 :: (a -> a -> a) -> Literal a -> Literal a -> Literal a
-lift2 f (Int a) (Int b) = Int (f a b)
-lift2 f (Double a) (Double b) = Double (f a b)
-lift2 f (String a) (String b) = String (f a b)
-lift2 f (Integer a) (Integer b) = Integer (f a b)
-lift2 f (Rational a) (Rational b) = Rational (f a b)
-lift2 f (Day a) (Day b) = Day (f a b)
-lift2 _ _ _ = error "Really, GHC. Really?"
 
 class Literate t => Sorted t
 
 class Sorted t => Timed t where
   type Delta :: (* -> *) -> *
-
-class Literate t where
-  _Literal :: Lit a => Prism' (t a) (Literal a)
-
-instance Literate Literal where
-  _Literal = id
-
-int :: Literate t => Int -> t Int
-int a = _Literal # Int a
-
-integer :: Literate t => Integer -> t Integer
-integer a = _Literal # Integer a
-
-rational :: Literate t => Rational -> t Rational
-rational a = _Literal # Rational a
-
-double :: Literate t => Double -> t Double
-double a = _Literal # Double a
-
-string :: Literate t => String -> t String
-string a = _Literal # String a
-
-day :: Literate t => Day -> t Day
-day a = _Literal # Day a
-
--- _Int :: Literate t => Prism (t Int) Int
-
-class Typeable a => Lit a where
-  lit :: Literate t => a -> t a
-
-instance Lit Int where
-  lit = int
-
-instance Lit Integer where
-  lit = integer
-
-instance Lit Double where
-  lit = double
-
-instance Lit Rational where
-  lit = rational
-
-instance Lit String where
-  lit = string
-
-instance Lit Day where
-  lit = day
 
 data Dir = Asc | Desc
 
