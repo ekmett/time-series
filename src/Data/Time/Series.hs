@@ -17,8 +17,11 @@ import Data.Time.Series.Model
 import Data.Time.Series.Periodicity
 
 data F :: Timing -> * -> * where
-  Var :: Lit a      => Model t a -> F t a
-  EMA :: Periodic t => Double -> F t Double -> F t Double
+  Var       :: Lit a               => Model t a -> F t a
+  EMA       :: Periodic t          => Double -> F t Double -> F t Double
+  PrefixSum :: (Periodic t, Num a) => F t a -> F t a
+  Sliding   :: Periodic t          => Int -> (forall t'. F (P t') a -> F (P t') a) -> F t a -> F t a
+  Delay     ::                        Int -> F t a -> F t a
 
 -- foo = Var (Periodic startingDate 1 (Vector.replicate 100 4)) :: F Model (P Monthly) a
 
