@@ -36,5 +36,5 @@ library
   ghc-options:    -Wall
 
   exposed-modules:
-    Data.Series
-    Data.Series.Literal
+    Data.Time.Series
+    Data.Time.Series.Literal

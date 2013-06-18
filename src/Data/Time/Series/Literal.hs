@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
-module Data.Series.Literal
+module Data.Time.Series.Literal
   ( Literal(..)
   , Literate(..)
   , int

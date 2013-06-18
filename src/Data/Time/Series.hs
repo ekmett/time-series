@@ -7,15 +7,14 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ParallelListComp #-}
-module Data.Series where
+module Data.Time.Series where
 
 import Control.Applicative
 import Control.Lens
 import Data.Foldable
-import Data.Series.Literal
 import Data.Time
+import Data.Time.Series.Literal
 import Data.Traversable
-import Data.Typeable
 
 class Literate t => Sorted t
 
