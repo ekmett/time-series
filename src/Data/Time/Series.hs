@@ -112,36 +112,3 @@ last = Last
 
 first :: Sorted t => F t a -> F t a
 first = First
-
-newtype Behavior a
-  = Behavior { runBehavior :: [(Day,Day,a)] } deriving (Show,Read,Eq,Ord)
-  -- | Given (Literal a)
-
-instance Functor Behavior where
-  fmap = fmapDefault
-
-instance FunctorWithIndex Day Behavior where
-  -- imap = imapDefault
-
-instance Foldable Behavior where
-  foldMap = foldMapDefault
-
-instance FoldableWithIndex Day Behavior where
-  -- ifoldMap = ifoldMapDefault
-
-instance Traversable Behavior where
-  traverse f (Behavior as) = Behavior <$> traverse g as where
-    g (a,b,c) = (,,) a b <$> f c
-
-instance TraversableWithIndex Day Behavior where
-  itraverse f (Behavior as) = Behavior <$> traverse g as where
-    g (a,b,c) = (,,) a b <$> f a c
-
-instance Literate Behavior where
-  -- _Literal :: Prism' (t a) (Literal a)
-
-instance Sorted Behavior
-instance Timed Behavior where
-
-  -- type Delta Behavior = NominalDiffTime
-
