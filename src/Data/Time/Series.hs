@@ -9,12 +9,9 @@
 {-# LANGUAGE ParallelListComp #-}
 module Data.Time.Series where
 
-import Control.Applicative
 import Control.Lens
-import Data.Foldable
 import Data.Time
 import Data.Time.Series.Literal
-import Data.Traversable
 
 class Literate t => Sorted t
 
