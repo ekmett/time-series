@@ -40,6 +40,7 @@ lift2 f (String a) (String b) = String (f a b)
 lift2 f (Integer a) (Integer b) = Integer (f a b)
 lift2 f (Rational a) (Rational b) = Rational (f a b)
 lift2 f (Day a) (Day b) = Day (f a b)
+lift2 _ _ _ = error "Really, GHC. Really?"
 
 class Literate t => Sorted t
 
