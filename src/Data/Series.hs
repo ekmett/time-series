@@ -15,17 +15,7 @@ import Data.Foldable
 import Data.Ratio
 import Data.Time
 import Data.Traversable
-
-data Type a where
-  INT      :: Type Int
-  DOUBLE   :: Type Double
-  STRING   :: Type String
-  INTEGER  :: Type Integer
-  RATIONAL :: Type Rational
-  DAY      :: Type Day
-
-class Typed a where
-  infer :: t a -> Type a
+import Data.Typeable
 
 data Literal a where
   Int      :: Int -> Literal Int
@@ -52,7 +42,7 @@ lift2 f (Rational a) (Rational b) = Rational (f a b)
 lift2 f (Day a) (Day b) = Day (f a b)
 
 
-instance (Typed a, Num a) => Num (Literal a) where
+instance (Typeable a, Num a) => Num (Literal a) where
   (+) = lift2 (+)
   (-) = lift2 (-)
   negate = lift1 negate
@@ -60,24 +50,6 @@ instance (Typed a, Num a) => Num (Literal a) where
   signum = lift1 signum
   (*) = lift2 (*)
   fromInteger = undefined -- TODO, use infer
-
-instance Typed Int where
-  infer _ = INT
-
-instance Typed Double where
-  infer _ = DOUBLE
-
-instance Typed String where
-  infer _ = STRING
-
-instance Typed Integer where
-  infer _ = INTEGER
-
-instance Typed Rational where
-  infer _ = RATIONAL
-
-instance Typed Day where
-  infer _ = DAY
 
 class Literate t => Sorted t
 
@@ -133,45 +105,8 @@ instance Lit Day where
 
 data Dir = Asc | Desc
 
-inferL :: Literal a -> Type a
-inferL Int{}      = INT
-inferL Rational{} = RATIONAL
-inferL Double{}   = DOUBLE
-inferL Integer{}  = INTEGER
-inferL Day{}      = DAY
-
-inferF :: F t a -> Type a
-inferF (Var a)         = infer a
-inferF (Sliding _ f a) = inferF (f a)
-inferF (By _ f a)      = inferF (f a)
-inferF EMA{}           = DOUBLE
-inferF (Literal a)     = inferL a
-inferF (Integral a)    = inferF a
-inferF Step{}          = INT
-inferF (Every _ a)     = inferF a
-inferF (Sum a)         = inferF a
-inferF Monthly         = DAY
-inferF Daily           = DAY
-inferF (Median a)      = inferF a
-inferF (First a)       = inferF a
-inferF (Last a)        = inferF a
-inferF (ArgMin _ b)    = inferF b
-inferF (ArgMax _ b)    = inferF b
-inferF (OrElse a _)    = inferF a
-inferF (Delay _ _ a)   = inferF a
-inferF (a :+ _)        = inferF a
-inferF (a :- _)        = inferF a
-inferF (Negate a)      = inferF a
-inferF (a :* _)        = inferF a
-inferF (Abs a)         = inferF a
-inferF (Signum a)      = inferF a
-inferF (a :/ _)        = inferF a
-inferF (Recip a)       = inferF a
-
--- behavior model [(t,t,a)] -- starting time, ending time, value
-
 data F :: (* -> *) -> * -> * where
-  Var      :: Typed a               => t a -> F t a
+  Var      :: Typeable a            => t a -> F t a
 
   -- * Memory
   Sliding  :: Timed t               => Delta t -> (forall s. Sorted s => F s as -> F s b) -> F t as -> F t b
@@ -293,5 +228,5 @@ instance Timed Behavior where
 eval :: F Behavior a -> Either (Literal a) (Behavior a)
 eval (Var as) = Right as
 eval (Step as) = case eval as of
-  Right behavior -> Right $ Behavior [ (f, t, i) | (f,t,a) <- runBehavior behavior | i <- [0..] ]
+  Right behavior -> Right $ Behavior [ (f, t, i) | (f,t,_) <- runBehavior behavior | i <- [0..] ]
   Left _         -> Left (Int 0)
