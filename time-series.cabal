@@ -1,0 +1,35 @@
+name:          time-series
+category:      Data
+version:       0.1
+license:       BSD3
+cabal-version: >= 1.10
+license-file:  LICENSE
+author:        Edward A. Kmett
+maintainer:    Edward A. Kmett <ekmett@gmail.com>
+stability:     provisional
+homepage:      http://github.com/ekmett/time-series/
+bug-reports:   http://github.com/ekmett/time-series/issues
+copyright:     Copyright (C) 2013 Edward A. Kmett
+synopsis:      Time series calculations
+description:   Time series calculations
+build-type:    Simple
+extra-source-files: .travis.yml README.markdown
+
+source-repository head
+  type: git
+  location: git://github.com/ekmett/time-series.git
+
+flag base2
+  default: False
+  manual: False
+
+library
+  default-language: Haskell98
+  other-extensions: CPP
+
+  build-depends: base >= 3 && < 5
+
+  hs-source-dirs: src
+  ghc-options:    -Wall
+
+  exposed-modules: Data.Series
