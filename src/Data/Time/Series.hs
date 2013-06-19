@@ -16,15 +16,48 @@ import Data.Time.Series.Literal
 import Data.Time.Series.Model
 import Data.Time.Series.Periodicity
 
-data F :: Timing -> * -> * where
-  Var       :: Lit a               => Model t a -> F t a
-  EMA       :: Periodic t          => Double -> F t Double -> F t Double
-  PrefixSum :: (Periodic t, Num a) => F t a -> F t a
-  Sliding   :: Periodic t          => Int -> (forall t'. F (P t') a -> F (P t') a) -> F t a -> F t a
-  Delay     ::                        Int -> F t a -> F t a
-  Step      :: Periodic t          => F t a -> F t Int
-  -- Sample    ::                        Search t -> F t a ->   
+data Search a where
+  Lookback :: Int -> Periodicity -> Search a -> Search a
+  Lookforward :: Int -> Periodicity -> Search a -> Search a
+  Looknear :: Int -> Periodicity -> Search a -> Search a
+  OrElse :: a -> Search a
 
+data F :: Timing -> * -> * where
+  Var       :: Lit a => Model t a -> F t a
+  EMA       :: Periodic t => Double -> F t Double -> F t Double
+  PrefixSum :: (Periodic t, Num a) => F t a -> F t a
+  Sliding   :: Periodic t => Int -> (forall t'. F (P t') a -> F (P t') a) -> F t a -> F t a
+  Delay     :: Int -> F t a -> F t a
+  Step      :: Periodic t => F t a -> F t Int
+  Sample    :: Search a -> F t' a -> F (P t) a
+  (:+)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
+  (:-)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
+  (:*)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
+  (:/)      :: (Periodic t, Fractional a) => F t a -> F t a -> F t a
+  Negate    :: (Periodic t, Num a) => F t a -> F t a
+  Abs       :: (Periodic t, Num a) => F t a -> F t a
+  Signum    :: (Periodic t, Num a) => F t a -> F t a
+  Recip     :: (Periodic t, Fractional a) => F t a -> F t a
+
+  -- * Passes
+  Sum :: (Periodic t', Num a) => F t' a -> F t a
+  Median :: (Periodic t', Num a) => F t' a -> F t a
+  First :: (Periodic t', Num a) => F t' a -> F t a
+  Last :: (Periodic t', Num a) => F t' a -> F t a
+  ArgMin :: Num a => F t' a -> F t a
+  ArgMax :: Num a => F t' a -> F t a
+  -- By       ::                          F t a -> (forall s. F s bs -> F s c) -> F t bs -> F t c
+  -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
+
+{-
+_Var :: Lit a => Prism' (F t a) (Model t a)
+_Var = prism' Var $ \a -> case a of
+  Var l -> Just l
+  _ -> Nothing
+
+instance Literate (F t) where
+  _Literal = _Var._Literal
+-}
 
 -- foo = Var (Periodic startingDate 1 (Vector.replicate 100 4)) :: F Model (P Monthly) a
 
@@ -87,14 +120,6 @@ instance (Literate t, Lit a, Fractional a) => Fractional (F t a) where
   (/) = (:/)
   recip = Recip
   fromRational = lit . fromRational
-
-_Var :: Lit a => Prism' (F t a) (t a)
-_Var = prism' Var $ \a -> case a of
-  Var l -> Just l
-  _ -> Nothing
-
-instance Literate t => Literate (F t) where
-  _Literal = _Var._Literal
 
 replaceMissing :: (Literate t, Lit a) => a -> F t a -> F t a
 replaceMissing a p = p `OrElse` lit a
