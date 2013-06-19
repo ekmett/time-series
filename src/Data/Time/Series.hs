@@ -22,6 +22,9 @@ data F :: Timing -> * -> * where
   PrefixSum :: (Periodic t, Num a) => F t a -> F t a
   Sliding   :: Periodic t          => Int -> (forall t'. F (P t') a -> F (P t') a) -> F t a -> F t a
   Delay     ::                        Int -> F t a -> F t a
+  Step      :: Periodic t          => F t a -> F t Int
+  -- Sample    ::                        Search t -> F t a ->   
+
 
 -- foo = Var (Periodic startingDate 1 (Vector.replicate 100 4)) :: F Model (P Monthly) a
 
