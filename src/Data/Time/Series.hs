@@ -42,10 +42,12 @@ data F :: Timing -> * -> * where
   -- * Passes
   Sum :: (Periodic t', Num a) => F t' a -> F t a
   Median :: (Periodic t', Num a) => F t' a -> F t a
-  First :: (Periodic t', Num a) => F t' a -> F t a
-  Last :: (Periodic t', Num a) => F t' a -> F t a
-  ArgMin :: Num a => F t' a -> F t a
-  ArgMax :: Num a => F t' a -> F t a
+  First :: Num a => F t' a -> F t a -- need an ordered constraint, so can't be used in a By 
+  Last :: Num a => F t' a -> F t a
+  Min :: F t' a -> F t a
+  Max :: F t' a -> F t a
+  ArgMin :: (Periodic t', Num a) => F t' a -> F t' b -> F t b
+  ArgMax :: (Periodic t', Num a) => F t' a -> F t' b -> F t b
   -- By       ::                          F t a -> (forall s. F s bs -> F s c) -> F t bs -> F t c
   -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
 
