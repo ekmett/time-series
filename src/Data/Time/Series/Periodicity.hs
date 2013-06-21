@@ -9,7 +9,7 @@ module Data.Time.Series.Periodicity
   ( Periodicity(..)
   , reifyPeriodicity
   , Timing(..)
-  , Periodic(..)
+--   , Periodic(..)
   ) where
 
 import Data.Data
@@ -17,29 +17,25 @@ import Data.Ix
 import Data.Proxy
 import GHC.TypeLits
 
-data Periodicity = Daily | Weekly | Monthly | Yearly
+data Periodicity = Always | Daily | Weekly | Monthly | Yearly
   deriving (Eq,Ord,Show,Read,Data,Enum,Bounded,Ix,Typeable)
 
-data Timing = V | P Periodicity | G
+data Timing = V | P Periodicity
   deriving (Eq,Ord,Show,Read,Data,Typeable)
-
-class (t ~ P (Period t)) => Periodic (t :: Timing) where
-  type Period t :: Periodicity
-
-instance Periodic (P t) where
-  type Period (P t) = t
 
 newtype instance Sing (m :: Periodicity) = SPeriodicity Periodicity
 
 instance SingE (Kind :: Periodicity) Periodicity where
   fromSing (SPeriodicity m) = m
 
+instance SingI Always   where sing = SPeriodicity Always
 instance SingI Daily   where sing = SPeriodicity Daily
 instance SingI Weekly  where sing = SPeriodicity Weekly
 instance SingI Monthly where sing = SPeriodicity Monthly
 instance SingI Yearly  where sing = SPeriodicity Yearly
 
 reifyPeriodicity :: Periodicity -> (forall (s :: Periodicity). SingI s => Proxy s -> r) -> r
+reifyPeriodicity Always f  = f (Proxy :: Proxy Always)
 reifyPeriodicity Daily f   = f (Proxy :: Proxy Daily)
 reifyPeriodicity Weekly f  = f (Proxy :: Proxy Weekly)
 reifyPeriodicity Monthly f = f (Proxy :: Proxy Monthly)
