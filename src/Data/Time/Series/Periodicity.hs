@@ -17,8 +17,8 @@ module Data.Time.Series.Periodicity
 
 import Data.Data
 import Data.Ix
-import Data.Proxy
 #if __GLASGOW_HASKELL__ >= 706
+import Data.Proxy
 import GHC.TypeLits
 #endif
 
