@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE KindSignatures #-}
@@ -7,15 +8,19 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module Data.Time.Series.Periodicity
   ( Periodicity(..)
-  , reifyPeriodicity
   , Timing(..)
 --   , Periodic(..)
+#if __GLASGOW_HASKELL__ >= 706
+  , reifyPeriodicity
+#endif
   ) where
 
 import Data.Data
 import Data.Ix
 import Data.Proxy
+#if __GLASGOW_HASKELL__ >= 706
 import GHC.TypeLits
+#endif
 
 data Periodicity = Always | Daily | Weekly | Monthly | Yearly
   deriving (Eq,Ord,Show,Read,Data,Enum,Bounded,Ix,Typeable)
@@ -23,6 +28,7 @@ data Periodicity = Always | Daily | Weekly | Monthly | Yearly
 data Timing = V | P Periodicity
   deriving (Eq,Ord,Show,Read,Data,Typeable)
 
+#if __GLASGOW_HASKELL__ >= 706
 newtype instance Sing (m :: Periodicity) = SPeriodicity Periodicity
 
 instance SingE (Kind :: Periodicity) Periodicity where
@@ -41,4 +47,4 @@ reifyPeriodicity Weekly f  = f (Proxy :: Proxy Weekly)
 reifyPeriodicity Monthly f = f (Proxy :: Proxy Monthly)
 reifyPeriodicity Yearly f  = f (Proxy :: Proxy Yearly)
 {-# INLINE reifyPeriodicity #-}
-
+#endif
