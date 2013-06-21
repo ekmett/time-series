@@ -20,7 +20,7 @@ import GHC.TypeLits
 data Periodicity = Daily | Weekly | Monthly | Yearly
   deriving (Eq,Ord,Show,Read,Data,Enum,Bounded,Ix,Typeable)
 
-data Timing = V | P Periodicity
+data Timing = V | P Periodicity | G
   deriving (Eq,Ord,Show,Read,Data,Typeable)
 
 class (t ~ P (Period t)) => Periodic (t :: Timing) where

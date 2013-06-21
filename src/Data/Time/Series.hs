@@ -22,32 +22,32 @@ data Search a where
   Looknear :: Int -> Periodicity -> Search a -> Search a
   OrElse :: a -> Search a
 
-data F :: Timing -> * -> * where
-  Var       :: Lit a => Model t a -> F t a
-  EMA       :: Periodic t => Double -> F t Double -> F t Double
-  PrefixSum :: (Periodic t, Num a) => F t a -> F t a
-  Sliding   :: Periodic t => Int -> (forall t'. F (P t') a -> F (P t') a) -> F t a -> F t a
-  Delay     :: Int -> F t a -> F t a
-  Step      :: Periodic t => F t a -> F t Int
-  Sample    :: Search a -> F t' a -> F (P t) a
-  (:+)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
-  (:-)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
-  (:*)      :: (Periodic t, Num a) => F t a -> F t a -> F t a
-  (:/)      :: (Periodic t, Fractional a) => F t a -> F t a -> F t a
-  Negate    :: (Periodic t, Num a) => F t a -> F t a
-  Abs       :: (Periodic t, Num a) => F t a -> F t a
-  Signum    :: (Periodic t, Num a) => F t a -> F t a
-  Recip     :: (Periodic t, Fractional a) => F t a -> F t a
+data F :: * -> Timing -> * -> * where
+  Var       :: Lit a => Model t a -> F s t a
+  EMA       :: Periodic t => Double -> F s t Double -> F s t Double
+  PrefixSum :: (Periodic t, Num a) => F s t a -> F s t a
+  Sliding   :: Periodic t => Int -> (forall u. F u t a -> F u G a) -> F s t a -> F s t a
+  Delay     :: Int -> F s t a -> F s t a
+  Step      :: Periodic t => F s t a -> F s t Int
+  Sample    :: Search a -> F s t' a -> F s (P t) a
+  (:+)      :: (Periodic t, Num a) => F s t a -> F s t a -> F s t a
+  (:-)      :: (Periodic t, Num a) => F s t a -> F s t a -> F s t a
+  (:*)      :: (Periodic t, Num a) => F s t a -> F s t a -> F s t a
+  (:/)      :: (Periodic t, Fractional a) => F s t a -> F s t a -> F s t a
+  Negate    :: (Periodic t, Num a) => F s t a -> F s t a
+  Abs       :: (Periodic t, Num a) => F s t a -> F s t a
+  Signum    :: (Periodic t, Num a) => F s t a -> F s t a
+  Recip     :: (Periodic t, Fractional a) => F s t a -> F s t a
 
   -- * Passes
-  Sum :: (Periodic t', Num a) => F t' a -> F t a
-  Median :: (Periodic t', Num a) => F t' a -> F t a
-  First :: Num a => F t' a -> F t a -- need an ordered constraint, so can't be used in a By 
-  Last :: Num a => F t' a -> F t a
-  Min :: F t' a -> F t a
-  Max :: F t' a -> F t a
-  ArgMin :: (Periodic t', Num a) => F t' a -> F t' b -> F t b
-  ArgMax :: (Periodic t', Num a) => F t' a -> F t' b -> F t b
+  Sum :: (Periodic t', Num a) => F s t' a -> F s t a
+  Median :: (Periodic t', Num a) => F s t' a -> F s t a
+  First :: Num a => F s t' a -> F s t a -- need an ordered constraint, so can't be used in a By 
+  Last :: Num a => F s t' a -> F s t a
+  Min :: F s t' a -> F s t a
+  Max :: F s t' a -> F s t a
+  ArgMin :: (Periodic t', Num a) => F s t' a -> F s t' b -> F s t b
+  ArgMax :: (Periodic t', Num a) => F s t' a -> F s t' b -> F s t b
   -- By       ::                          F t a -> (forall s. F s bs -> F s c) -> F t bs -> F t c
   -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
 
