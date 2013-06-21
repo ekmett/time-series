@@ -38,15 +38,26 @@ data F :: * -> Timing -> * -> * where
   Abs       :: Num a => F s (P u) a -> F s (P u) a
   Signum    :: Num a => F s (P u) a -> F s (P u) a
   Recip     :: Fractional a => F s (P u) a -> F s (P u) a
+  Filter    :: F s (P t) Bool -> F s (P t) a -> F s V a
+
+  (:==)     :: Eq a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:/=)     :: Eq a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:<=)     :: Ord a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:<)      :: Ord a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:>=)     :: Ord a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:>)      :: Ord a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
+  (:&&)     :: F s (P u) Bool -> F s (P u) Bool -> F s (P u) Bool
+  (:||)     :: F s (P u) Bool -> F s (P u) Bool -> F s (P u) Bool
+  Not       :: F s t Bool -> F s t Bool
 
   -- * Passes
-  Sum :: Num a => F s (P u) a -> F s t a
-  Median :: Num a => F s (P u) a -> F s t a
-  First :: Num a => F s (P u) a -> F s t a
-  Last :: Num a => F s (P u) a -> F s t a
-  Min :: Ord a => F s (P u) a -> F s t a
-  Max :: Ord a => F s (P u) a -> F s t a
-  ArgMin :: Ord a => F s t' a -> F s t' b -> F s t b
-  ArgMax :: Ord a => F s t' a -> F s t' b -> F s t b
+  Sum       :: Num a => F s (P u) a -> F s t a
+  Median    :: Num a => F s (P u) a -> F s t a
+  First     :: F s (P u) a -> F s t a
+  Last      :: F s (P u) a -> F s t a
+  Min       :: Ord a => F s (P u) a -> F s t a
+  Max       :: Ord a => F s (P u) a -> F s t a
+  ArgMin    :: Ord a => F s t' a -> F s t' b -> F s t b
+  ArgMax    :: Ord a => F s t' a -> F s t' b -> F s t b
   -- By       ::                          F t a -> (forall s. F s bs -> F s c) -> F t bs -> F t c
   -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
