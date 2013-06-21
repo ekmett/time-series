@@ -10,10 +10,7 @@
 {-# LANGUAGE ParallelListComp #-}
 module Data.Time.Series where
 
--- import Control.Lens
--- import Data.Time
 import Data.Time.Series.Literal
-import Data.Time.Series.Model
 import Data.Time.Series.Periodicity
 
 data Search a where
@@ -22,8 +19,8 @@ data Search a where
   LookNear :: Int -> Periodicity -> Search a -> Search a
   OrElse :: a -> Search a
 
-data F :: * -> Timing -> * -> * where
-  Var       :: Lit a => Model t a -> F s t a
+data F :: (Timing -> * -> *) -> Timing -> * -> * where
+  Var       :: Lit a => s t a -> F s t a
   EMA       :: Double -> F s (P u) Double -> F s (P u) Double
   PrefixSum :: Num a => F s (P u) a -> F s (P u) a
   Sliding   :: Int -> (forall s'. F s' (P u) a -> F s' (P Always) a) -> F s (P u) a -> F s (P u) a
