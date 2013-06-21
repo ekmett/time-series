@@ -17,9 +17,9 @@ import Data.Time.Series.Model
 import Data.Time.Series.Periodicity
 
 data Search a where
-  Lookback :: Int -> Periodicity -> Search a -> Search a
-  Lookforward :: Int -> Periodicity -> Search a -> Search a
-  Looknear :: Int -> Periodicity -> Search a -> Search a
+  LookBack :: Int -> Periodicity -> Search a -> Search a
+  LookForward :: Int -> Periodicity -> Search a -> Search a
+  LookNear :: Int -> Periodicity -> Search a -> Search a
   OrElse :: a -> Search a
 
 data F :: * -> Timing -> * -> * where
