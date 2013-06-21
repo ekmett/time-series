@@ -38,7 +38,7 @@ data F :: * -> Timing -> * -> * where
   Abs       :: Num a => F s (P u) a -> F s (P u) a
   Signum    :: Num a => F s (P u) a -> F s (P u) a
   Recip     :: Fractional a => F s (P u) a -> F s (P u) a
-  Filter    :: F s (P t) Bool -> F s (P t) a -> F s V a
+  Filter    :: F s (P u) Bool -> F s (P u) a -> F s V a
 
   (:==)     :: Eq a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
   (:/=)     :: Eq a => F s (P u) a -> F s (P u) a -> F s (P u) Bool
