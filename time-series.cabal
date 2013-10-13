@@ -29,12 +29,12 @@ library
 
   build-depends:
     array,
-    base >= 3 && < 5,
+    base      >= 3 && < 5,
     ghc-prim,
-    lens >= 3.9 && < 4,
+    lens      >= 3.9 && < 4,
     tagged,
-    time >= 1.4 && < 1.5,
-    vector >= 0.10 && < 0.11
+    time      >= 1.4 && < 1.5,
+    vector    >= 0.10 && < 0.11
 
   hs-source-dirs: src
   ghc-options:    -Wall
