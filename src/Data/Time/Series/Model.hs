@@ -9,8 +9,8 @@ import Data.Vector
 
 data Model :: Timing -> * -> * where
   Given    :: a -> Model t a
-  Periodic :: Day -> Int -> Vector a -> Model (P t) a -- * Starting day, difference in P units between points 
-  Variant  :: [(Day, a)] -> Model V a                 -- * List of impulses 
+  Periodic :: Day -> Int -> Vector a -> Model (P t) a -- * Starting day, difference in P units between points
+  Variant  :: [(Day, a)] -> Model V a                 -- * List of impulses
 
 instance Functor (Model t) where
   fmap f (Given a) = Given (f a)
