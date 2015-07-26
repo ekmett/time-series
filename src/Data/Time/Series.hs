@@ -23,13 +23,13 @@ data Search a where
 data F :: (Timing -> * -> *) -> Timing -> * -> * where
   Var       :: Lit a => s t a -> F s t a
 
-  EMA       :: Double -> F s (P (T u)) Double -> F s (P (T u)) Double
-  PrefixSum :: Num a => F s (P (T u)) a -> F s (P (T u)) a
-  Sliding   :: Int -> (forall s'. F s' (P (T u)) a -> F s' (P (T Always)) a) -> F s (P (T u)) a -> F s (P (T u)) a
-  Delay     :: Int -> F s t a -> F s t a -- problematic, this should work on P (T u) or V, but not (P B)!
-  Step      :: F s (P (T u)) a -> F s (P (T u)) Int
-  Sample    :: Search a -> F s t' a -> F s (P u) a -- should require t' to not be (P B), parameterize the Search?
-  Variant   :: F s (P (T u)) a -> F s V a
+  EMA       :: Double -> F s (P u) Double -> F s (P u) Double
+  PrefixSum :: Num a => F s (P u) a -> F s (P u) a
+  Sliding   :: Int -> (forall s'. F s' (P u) a -> F s' (P (T Always)) a) -> F s (P u) a -> F s (P u) a
+  Delay     :: Int -> F s t a -> F s t a
+  Step      :: F s (P u) a -> F s (P u) Int
+  Sample    :: Search a -> F s t' a -> F s (P u) a
+  Variant   :: F s (P u) a -> F s V a
   (:+)      :: Num a => F s (P u) a -> F s (P u) a -> F s (P u) a
   (:-)      :: Num a => F s (P u) a -> F s (P u) a -> F s (P u) a
   (:*)      :: Num a => F s (P u) a -> F s (P u) a -> F s (P u) a
@@ -53,8 +53,8 @@ data F :: (Timing -> * -> *) -> Timing -> * -> * where
   -- * Passes
   Sum       :: Num a => F s (P u) a -> F s t a
   Median    :: Num a => F s (P u) a -> F s t a
-  First     :: F s (P (T u)) a -> F s t a
-  Last      :: F s (P (T u)) a -> F s t a
+  First     :: F s (P u) a -> F s t a
+  Last      :: F s (P u) a -> F s t a
   Min       :: Ord a => F s (P u) a -> F s t a
   Max       :: Ord a => F s (P u) a -> F s t a
   ArgMin    :: Ord a => F s (P u) a -> F s (P u) b -> F s t b
@@ -66,7 +66,7 @@ data F :: (Timing -> * -> *) -> Timing -> * -> * where
 class Periodic t where
   ema :: Double -> F s t Double -> F s t Double
 
-instance Periodic (P (T u)) where
+instance Periodic (P u) where
   ema = EMA
 
 {-
