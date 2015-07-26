@@ -60,7 +60,7 @@ data F :: (Timing -> * -> *) -> Timing -> * -> * where
   ArgMin    :: Ord a => F s (P u) a -> F s (P u) b -> F s t b
   ArgMax    :: Ord a => F s (P u) a -> F s (P u) b -> F s t b
   -- need Count
-  By        :: F s (P u) a -> (forall s'. F s' (P B) a -> F s' (P u) b -> F s' (P (T Always)) c)) -> F s (P u) b -> F s (P u) c
+  By        :: F s (P u) a -> (forall s'. F s' (P B) a -> F s' (P u) b -> F s' (P (T Always)) c) -> F s (P u) b -> F s (P u) c
   -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
 
 class Periodic t where
