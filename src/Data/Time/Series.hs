@@ -25,7 +25,7 @@ data F :: (Timing -> * -> *) -> Timing -> * -> * where
 
   EMA       :: Double -> F s (P u) Double -> F s (P u) Double
   PrefixSum :: Num a => F s (P u) a -> F s (P u) a
-  Sliding   :: Int -> (forall s'. F s' (P u) a -> F s' (P (T Always)) a) -> F s (P u) a -> F s (P u) a
+  Sliding   :: Int -> (forall s'. F s' (P u) a -> F s' (P Always) a) -> F s (P u) a -> F s (P u) a
   Delay     :: Int -> F s t a -> F s t a
   Step      :: F s (P u) a -> F s (P u) Int
   Sample    :: Search a -> F s t' a -> F s (P u) a
@@ -60,7 +60,7 @@ data F :: (Timing -> * -> *) -> Timing -> * -> * where
   ArgMin    :: Ord a => F s (P u) a -> F s (P u) b -> F s t b
   ArgMax    :: Ord a => F s (P u) a -> F s (P u) b -> F s t b
   -- need Count
-  By        :: F s (P u) a -> (forall s'. F s' (P B) a -> F s' (P u) b -> F s' (P (T Always)) c) -> F s (P u) b -> F s (P u) c
+  By        :: F s (P u) a -> (forall s'. F s' (P ub) a -> F s' (P u) b -> F s' (P Always) c) -> F s (P u) b -> F s (P u) c
   -- Sorting  ::                       [(F t a, Dir)] -> (forall s. Sorted s => F s bs -> F s c) -> F t bs -> F t c
 
 class Periodic t where
