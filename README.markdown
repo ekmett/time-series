@@ -1,7 +1,7 @@
 time-series
 ===========
 
-[![Hackage](https://img.shields.io/hackage/v/time-series.svg)](https://hackage.haskell.org/package/time-series) [![Build Status](https://secure.travis-ci.org/ekmett/time-series.png?branch=master)](http://travis-ci.org/ekmett/time-series
+[![Hackage](https://img.shields.io/hackage/v/time-series.svg)](https://hackage.haskell.org/package/time-series) [![Build Status](https://secure.travis-ci.org/ekmett/time-series.png?branch=master)](http://travis-ci.org/ekmett/time-series)
 
 Contact Information
 -------------------
