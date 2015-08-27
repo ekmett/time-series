@@ -27,9 +27,9 @@ library
     array,
     base      >= 4.6 && < 5,
     ghc-prim,
-    lens      >= 3.9 && < 4,
+    lens      >= 4.12 && < 5,
     tagged,
-    time      >= 1.4 && < 1.5,
+    time      >= 1.4 && < 1.6,
     vector    >= 0.10 && < 0.11
 
   hs-source-dirs: src
